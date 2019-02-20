@@ -35,7 +35,7 @@ class MainWindow(QMainWindow):
         self._searchProxyModel.setSourceModel(self._batchTreeModel)
         self._addressModel = AddressModel(parent=self)
 
-        self._ui.statBatch = StatWidget(parent=self)
+        self._ui.statBatch = StatWidget(parent=self, headers=['№', 'Запуск', 'Кристаллов всего', 'Прогресс', 'Дата запуска'])
 
         self._ui.tabWidget.addTab(self._ui.statBatch, 'Запуски')
 

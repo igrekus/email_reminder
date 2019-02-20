@@ -1,19 +1,22 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
 
 from statmodel import StatModel
 
 
 class StatWidget(QWidget):
 
-    def __init__(self, parent=None, label=''):
+    def __init__(self, parent=None, headers=None):
         super().__init__(parent=parent)
+
+        self._workdir = '.'
 
         self._button = QPushButton('Открыть...')
         self._edit = QLineEdit()
         self._tree = QTreeView()
 
-        self._model = StatModel()
+        self._model = StatModel(parent=self, headers=headers)
+        self._tree.setModel(self._model)
 
         self._layoutControl = QHBoxLayout()
         self._layoutControl.addWidget(self._button)
@@ -32,7 +35,12 @@ class StatWidget(QWidget):
 
     @pyqtSlot()
     def _on_button_clicked(self):
-        print('click')
+        dialog = QFileDialog(self, 'Выбрать папку...', self._workdir)
+        dialog.setFileMode(QFileDialog.DirectoryOnly)
+        if dialog.exec() != QFileDialog.Accepted:
+            return
+
+        self._workdir = dialog.selectedFiles()[0]
 
 
 
