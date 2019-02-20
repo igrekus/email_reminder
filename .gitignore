@@ -183,6 +183,6 @@ devices\.sqlite
 
 xlsx/
 
-.\connect.ini
+connect\.ini
 
-.\contacts.txt
+contacts\.txt
