@@ -1,31 +1,27 @@
-class TreeNode:
-
+class TreeNode(object):
     def __init__(self, data=None, parent=None):
-        self._data = data or None
+        self._data = data
+        self._parent_node = parent
         self._child_nodes = list()
-        self._parent_node = parent or None
 
-    def __len__(self):
-        return len(self._child_nodes)
-
-    def append_child_node(self, item: 'TreeNode'):
+    def append_child(self, item):
         self._child_nodes.append(item)
 
-    def child_node(self, row: int) -> 'TreeNode':
+    def child_at(self, row):
         return self._child_nodes[row]
 
-    def child_node_count(self) -> int:
+    def child_count(self):
         return len(self._child_nodes)
 
-    def parent(self) -> 'TreeNode':
+    def parent(self):
         return self._parent_node
 
-    def row(self) -> int:
-        if not self._parent_node:
-            return 0
-        return self._parent_node._child_nodes.index(self)
+    def row(self):
+        if self._parent_node:
+            return self._parent_node._child_nodes.index(self)
+        return 0
 
-    def has_child_nodes(self) -> bool:
+    def has_child_nodes(self):
         return bool(self._child_nodes)
 
     def clear(self):
@@ -43,3 +39,5 @@ class TreeNode:
     def data(self, data):
         self._data = data
 
+    def __str__(self):
+        return f'TreeNode(data:{self._data} parent:{self._parent_node} childs:{len(self._child_nodes)})'

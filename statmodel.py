@@ -1,8 +1,7 @@
 from PyQt5.QtCore import Qt, QVariant, QModelIndex
 from PyQt5.QtCore import QAbstractItemModel
 
-# from treenode import TreeNode
-from batchmodel import TreeNode
+from treenode import TreeNode
 
 
 class StatModel(QAbstractItemModel):
@@ -20,7 +19,7 @@ class StatModel(QAbstractItemModel):
         print('init batch model')
         for file in [1, 2, 3]:
             newNode = TreeNode('top level', self._rootNode)
-            self._rootNode.appendChild(newNode)
+            self._rootNode.append_child(newNode)
 
     def clear(self):
         self._rootNode.clear()
@@ -34,7 +33,7 @@ class StatModel(QAbstractItemModel):
         if parent.column() > 0:
             return 0
         parent_node = parent.internalPointer() if parent.isValid() else self._rootNode
-        return parent_node.childCount()
+        return parent_node.child_count()
 
     def columnCount(self, parent=QModelIndex(), *args, **kwargs):
         return 5
@@ -44,7 +43,7 @@ class StatModel(QAbstractItemModel):
             return QModelIndex()
 
         parent_node = parent.internalPointer() if parent.isValid() else self._rootNode
-        child_node = parent_node.child(row)
+        child_node = parent_node.child_at(row)
         return self.createIndex(row, col, child_node) if child_node else QModelIndex()
 
     def parent(self, index: QModelIndex):
