@@ -1,17 +1,11 @@
-import typing
-
-from attr import attrs, Factory
-
-
-@attrs(auto_attribs=True)
 class TreeNode:
 
-    _data: typing.Any = None
-    _child_nodes: list = Factory(list)
-    parent_node: typing.Optional['TreeNode'] = None
-    column_count: int = 0
+    def __init__(self, data=None, parent=None):
+        self._data = data or None
+        self._child_nodes = list()
+        self._parent_node = parent or None
 
-    def __len__(self) -> int:
+    def __len__(self):
         return len(self._child_nodes)
 
     def append_child_node(self, item: 'TreeNode'):
@@ -24,28 +18,28 @@ class TreeNode:
         return len(self._child_nodes)
 
     def parent(self) -> 'TreeNode':
-        return self.parent_node
+        return self._parent_node
 
     def row(self) -> int:
-        if self.parent_node:
-            return self.parent_node._child_nodes.index(self)
-        return 0
+        if not self._parent_node:
+            return 0
+        return self._parent_node._child_nodes.index(self)
 
     def has_child_nodes(self) -> bool:
-        return bool(len(self._child_nodes))
+        return bool(self._child_nodes)
 
     def clear(self):
         for child in self._child_nodes:
             child.clear()
         self._child_nodes.clear()
         self._data = None
-        self.parent_node = None
+        self._parent_node = None
 
     @property
-    def data(self) -> typing.Any:
+    def data(self):
         return self._data
 
     @data.setter
-    def data(self, data=typing.Any):
+    def data(self, data):
         self._data = data
 

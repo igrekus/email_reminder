@@ -48,7 +48,7 @@ class TreeNode(object):
         return self._data
 
     def __str__(self):
-        return f'TreeNode(data:{self._data} parent:{id(self._parent_node)} children:{len(self._child_nodes)}'
+        return f'TreeNode(data:{self._data} parent:{self._parent_node} children:{len(self._child_nodes)})'
 
 
 class BatchModel(QAbstractItemModel):

@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
 
 from statmodel import StatModel
 
@@ -15,7 +15,7 @@ class StatWidget(QWidget):
         self._edit = QLineEdit()
         self._tree = QTreeView()
 
-        self._model = StatModel(headers=headers)
+        self._model = StatModel(parent=self, headers=headers)
         self._tree.setModel(self._model)
 
         self._layoutControl = QHBoxLayout()

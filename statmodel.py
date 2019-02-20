@@ -1,68 +1,77 @@
 from PyQt5.QtCore import Qt, QVariant, QModelIndex
 from PyQt5.QtCore import QAbstractItemModel
 
-from treenode import TreeNode
+# from treenode import TreeNode
+from batchmodel import TreeNode
 
 
 class StatModel(QAbstractItemModel):
 
     def __init__(self, parent=None, headers=None):
-        super().__init__(parent=parent)
-
+        super().__init__(parent)
         self._headers = headers or list()
-        self._rootNode = TreeNode(data=None, parent_node=None, column_count=5)
+        self._rootNode = TreeNode(None, None)
 
         self.init()
+        print(self._rootNode)
+        print(self._rootNode._child_nodes[0])
 
     def init(self):
-        for index in [1, 2, 3, 4, 5]:
-            self._rootNode.append_child_node(TreeNode(data=index, parent_node=self._rootNode, column_count=5))
+        print('init batch model')
+        for file in [1, 2, 3]:
+            newNode = TreeNode('top level', self._rootNode)
+            self._rootNode.appendChild(newNode)
 
     def clear(self):
         self._rootNode.clear()
 
-    def headerData(self, section, orientation, role=None) -> QVariant:
+    def headerData(self, section, orientation, role=None):
         if orientation == Qt.Horizontal and role == Qt.DisplayRole and section < len(self._headers):
             return QVariant(self._headers[section])
         return QVariant()
 
-    def rowCount(self, parent=QModelIndex(), *args, **kwargs) -> int:
-        # return 1
+    def rowCount(self, parent=QModelIndex(), *args, **kwargs):
+        if parent.column() > 0:
+            return 0
         parent_node = parent.internalPointer() if parent.isValid() else self._rootNode
-        return parent_node.child_node_count()
+        return parent_node.childCount()
 
-    def columnCount(self, parent=QModelIndex(), *args, **kwargs) -> int:
-        return len(self._headers)
+    def columnCount(self, parent=QModelIndex(), *args, **kwargs):
+        return 5
 
-    def index(self, row, col, parent) -> QModelIndex:
+    def index(self, row, col, parent):
         if not self.hasIndex(row, col, parent):
             return QModelIndex()
 
-        parent_item = parent.internalPointer() if parent.isValid() else self._rootNode
-        child_item = parent_item.child_node(row)
-        return self.createIndex(row, col, child_item) if child_item else QModelIndex()
+        parent_node = parent.internalPointer() if parent.isValid() else self._rootNode
+        child_node = parent_node.child(row)
+        return self.createIndex(row, col, child_node) if child_node else QModelIndex()
 
-    def parent(self, index: QModelIndex) -> QModelIndex:
+    def parent(self, index: QModelIndex):
         if not index.isValid():
             return QModelIndex()
         child_node = index.internalPointer()
         if not child_node:
             return QModelIndex()
-        parent_item = child_node.parent()
-        if parent_item == self._rootNode:
+        parent_node = child_node.parent()
+        if parent_node == self._rootNode:
             return QModelIndex()
-        return self.createIndex(parent_item.row(), index.column(), parent_item)
+        return self.createIndex(parent_node.row(), index.column(), parent_node)
 
-    def data(self, index: QModelIndex, role=None) -> QVariant:
+    # def setData(self, index, value, role):
+    #     return True
+
+    def data(self, index: QModelIndex, role=None):
         if not index.isValid():
             return QVariant()
 
-        print('heyyy')
-        return QVariant('test')
         row = index.row()
         col = index.column()
 
         item = index.internalPointer().data
+        if role == Qt.DisplayRole:
+            return QVariant(item)
+        return QVariant()
 
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
             if col == self.ColumnNumber:
@@ -105,16 +114,16 @@ class StatModel(QAbstractItemModel):
 
         return QVariant()
 
-    def hasChildren(self, parent: QModelIndex) -> bool:
-        if not parent.isValid():
-            return self._rootNode.has_child_nodes()
-        node = parent.internalPointer()
-        return node.has_child_nodes()
+    # def hasChildren(self, parent: QModelIndex):
+    #     if not parent.isValid():
+    #         return self._rootNode.hasChildNodes()
+    #     node = parent.internalPointer()
+    #     return node.hasChildNodes()
 
-    # def flags(self, index: QModelIndex):
-    #     f = super().flags(index)
-    #     return f
-    #
+    def flags(self, index: QModelIndex):
+        f = super().flags(index)
+        return f
+
     # @pyqtSlot(str, name='onDeviceAdded')
     # def rebuildBatchModel(self, _: str):
     #     print('on dir changed')
@@ -122,6 +131,4 @@ class StatModel(QAbstractItemModel):
     #     self.clear()
     #     self.init()
     #     self.endResetModel()
-    #
-    #
     #
