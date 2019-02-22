@@ -45,3 +45,8 @@ class TreeNode(object):
     @data.setter
     def data(self, data):
         self._data = data
+
+    @property
+    def child_nodes(self):
+        return self._child_nodes
+
