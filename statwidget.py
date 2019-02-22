@@ -42,6 +42,8 @@ class BatchItem(object):
             return self.specs_received, self.specs_needed
         elif item == 'received':
             return True
+        elif item == 'developer':
+            return ''
     @property
     def tier(self):
         return self._tier
@@ -97,6 +99,8 @@ class SpecItem(object):
             return 1, 1
         elif item == 'received':
             return self.is_received
+        elif item == 'developer':
+            return self.developer
     @property
     def tier(self):
         return self._tier
@@ -135,6 +139,7 @@ class StatWidget(QWidget):
         super().__init__(parent=parent)
 
         self._workDir = ''
+        self._root = None
 
         self._button = QPushButton('Открыть...')
         self._edit = QLineEdit()
@@ -202,17 +207,17 @@ class StatWidget(QWidget):
     def _buildModel(self):
         batches, specs = self._processDir()
 
-        root = TreeNode(None, None)
+        self._root = TreeNode(None, None)
 
         for file in batches:
-            newNode = TreeNode(file, root)
+            newNode = TreeNode(file, self._root)
             spec = specs.get(file.name)
             if spec:
                 for s in spec:
                     newNode.append_child(TreeNode(s, newNode))
-            root.append_child(newNode)
+            self._root.append_child(newNode)
 
-        self._model.init(rootNode=root)
+        self._model.init(rootNode=self._root)
 
     def _processDir(self):
 
@@ -255,4 +260,16 @@ class StatWidget(QWidget):
                     needed_specs += 1
         wb.close()
         return total_specs, needed_specs, specs
+
+    def getEmailData(self, rows):
+        email_data = dict()
+        for batch in self._root.child_nodes:
+            specs_for_dev = defaultdict(list)
+            for spec in batch.child_nodes:
+                if not spec['received']:
+                    specs_for_dev[spec['developer']].append(spec)
+            email_data[batch] = specs_for_dev
+
+        return email_data
+
 
