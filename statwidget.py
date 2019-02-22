@@ -14,6 +14,7 @@ from treenode import TreeNode
 from progressbardelegate import ProgressBarDelegate
 
 
+# TODO exctract specific batch logic to a class
 @attrs
 class BatchItem(object):
     _rowid = attrib(default=0, type=int)
