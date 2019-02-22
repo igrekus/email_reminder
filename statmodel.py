@@ -1,10 +1,20 @@
 from PyQt5.QtCore import Qt, QVariant, QModelIndex
 from PyQt5.QtCore import QAbstractItemModel
+from PyQt5.QtGui import QColor, QBrush
 
 from treenode import TreeNode
 
 
 class StatModel(QAbstractItemModel):
+
+    RoleId = Qt.UserRole + 1
+    RoleTier = RoleId + 1
+    RoleProgress = RoleTier + 1
+
+    TIER_1, \
+    TIER_2 = range(1, 3)
+
+    ColumnProgress = 3
 
     def __init__(self, parent=None, headers=None):
         super().__init__(parent)
@@ -56,70 +66,39 @@ class StatModel(QAbstractItemModel):
         if not index.isValid():
             return QVariant()
 
+        row = index.row()
         col = index.column()
 
         node = index.internalPointer()
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:
+            if col == 0:
+                return QVariant(row + 1)
             return QVariant(node[col])
 
-        return QVariant()
+        elif role == self.RoleId:
+            return node['id']
 
-        if role == Qt.DisplayRole or role == Qt.ToolTipRole:
-            if col == self.ColumnNumber:
-                return QVariant(row + 1)
-            elif col == self.ColumnName:
-                return QVariant(item.name)
-            elif col == self.ColumnSpecsTotal:
-                return QVariant(item.specs_total)
-            elif col == self.ColumnSpecsProgress:
-                if item.tier == TIER_BATCH:
-                    return QVariant(f'{item.specs_received}/{item.specs_needed}')
-                elif item.tier == TIER_SPECS:
-                    if item.is_received:
-                        return '+'
-                    else:
-                        return '-'
-            elif col == self.ColumnDate:
-                return QVariant(str(item.date))
+        elif role == self.RoleTier:
+            return node['tier']
 
         elif role == self.RoleProgress:
-            if col == self.ColumnSpecsProgress:
-                if item.tier == TIER_BATCH:
-                    return item.specs_received, item.specs_needed
+            if col == self.ColumnProgress:
+                if node['tier'] == self.TIER_1:
+                    return node['progress']
 
         elif role == Qt.BackgroundRole:
             retcol = QColor(Qt.white)
-            if col == self.ColumnSpecsProgress:
-                if item.tier == TIER_SPECS:
-                    if item.is_received:
+            if col == self.ColumnProgress:
+                if node['tier'] == self.TIER_2:
+                    if node['received']:
                         retcol = QColor(Qt.green).lighter(150)
                     else:
                         retcol = QColor(Qt.red).lighter(150)
             return QBrush(retcol)
 
-        elif role == self.RoleNodeId:
-            return item.tier
-
-        elif role == self.RoleTier:
-            return item.tier
-
         return QVariant()
-
-    # def hasChildren(self, parent: QModelIndex):
-    #     if not parent.isValid():
-    #         return self._rootNode.hasChildNodes()
-    #     node = parent.internalPointer()
-    #     return node.hasChildNodes()
 
     def flags(self, index: QModelIndex):
         f = super().flags(index)
         return f
 
-    # @pyqtSlot(str, name='onDeviceAdded')
-    # def rebuildBatchModel(self, _: str):
-    #     print('on dir changed')
-    #     self.beginResetModel()
-    #     self.clear()
-    #     self.init()
-    #     self.endResetModel()
-    #
