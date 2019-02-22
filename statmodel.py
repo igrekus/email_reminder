@@ -12,7 +12,9 @@ class StatModel(QAbstractItemModel):
         self._rootNode = TreeNode(None, None)
 
     def init(self, rootNode):
+        self.beginResetModel()
         self._rootNode = rootNode
+        self.endResetModel()
 
     def clear(self):
         self._rootNode.clear()
