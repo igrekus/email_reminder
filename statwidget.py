@@ -53,8 +53,24 @@ class StatWidget(QWidget):
         if dialog.exec() != QFileDialog.Accepted:
             return
 
-        self._workdir = dialog.selectedFiles()[0]
+        self.workDir = dialog.selectedFiles()[0]
 
+    @property
+    def workDir(self):
+        return self._workdir
 
+    @workDir.setter
+    def workDir(self, directory: str):
+        print(directory)
+
+        self._edit.setText(directory)
+
+        root = TreeNode(None, None)
+
+        for file in [1, 2, 3]:
+            newNode = TreeNode(['5', '4', '3', '2', '1'], root)
+            root.append_child(newNode)
+
+        self._model.init(rootNode=root)
 
 
