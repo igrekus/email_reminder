@@ -11,15 +11,8 @@ class StatModel(QAbstractItemModel):
         self._headers = headers or list()
         self._rootNode = TreeNode(None, None)
 
-        self.init()
-        print(self._rootNode)
-        print(self._rootNode._child_nodes[0])
-
-    def init(self):
-        print('init batch model')
-        for file in [1, 2, 3]:
-            newNode = TreeNode('top level', self._rootNode)
-            self._rootNode.append_child(newNode)
+    def init(self, rootNode):
+        self._rootNode = rootNode
 
     def clear(self):
         self._rootNode.clear()
@@ -57,19 +50,16 @@ class StatModel(QAbstractItemModel):
             return QModelIndex()
         return self.createIndex(parent_node.row(), index.column(), parent_node)
 
-    # def setData(self, index, value, role):
-    #     return True
-
     def data(self, index: QModelIndex, role=None):
         if not index.isValid():
             return QVariant()
 
-        row = index.row()
         col = index.column()
 
-        item = index.internalPointer().data
-        if role == Qt.DisplayRole:
-            return QVariant(item)
+        node = index.internalPointer()
+        if role == Qt.DisplayRole or role == Qt.ToolTipRole:
+            return QVariant(node[col])
+
         return QVariant()
 
         if role == Qt.DisplayRole or role == Qt.ToolTipRole:

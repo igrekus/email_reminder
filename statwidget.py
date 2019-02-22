@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
 
 from statmodel import StatModel
+from treenode import TreeNode
 
 
 class StatWidget(QWidget):
@@ -16,7 +17,6 @@ class StatWidget(QWidget):
         self._tree = QTreeView()
 
         self._model = StatModel(parent=self, headers=headers)
-        self._tree.setModel(self._model)
 
         self._layoutControl = QHBoxLayout()
         self._layoutControl.addWidget(self._button)
@@ -32,6 +32,19 @@ class StatWidget(QWidget):
         self._edit.setReadOnly(True)
 
         self._button.clicked.connect(self._on_button_clicked)
+
+        self.init()
+
+    def init(self):
+        root = TreeNode(None, None)
+
+        for file in [1, 2, 3]:
+            newNode = TreeNode(['1', '2', '3', '4', '5'], root)
+            root.append_child(newNode)
+
+        self._model.init(rootNode=root)
+
+        self._tree.setModel(self._model)
 
     @pyqtSlot()
     def _on_button_clicked(self):
