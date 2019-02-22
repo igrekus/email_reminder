@@ -46,7 +46,7 @@ class StatModel(QAbstractItemModel):
         if not child_node:
             return QModelIndex()
         parent_node = child_node.parent()
-        if parent_node == self._rootNode:
+        if parent_node == self._rootNode or parent_node is None:
             return QModelIndex()
         return self.createIndex(parent_node.row(), index.column(), parent_node)
 
