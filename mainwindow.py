@@ -29,14 +29,9 @@ class MainWindow(QMainWindow):
         self._emailTemplate = EmailTemplate()
         self._emailManager = EmailManager(template=self._emailTemplate)
 
-        self._domainModel = DomainModel(parent=self)
-        self._batchTreeModel = BatchModel(self, self._domainModel)
-        self._searchProxyModel = QSortFilterProxyModel(parent=self)
-        self._searchProxyModel.setSourceModel(self._batchTreeModel)
         self._addressModel = AddressModel(parent=self)
 
         self._ui.statBatch = StatWidget(parent=self, headers=['№', 'Запуск', 'Кристаллов всего', 'Прогресс', 'Дата запуска'])
-
         self._ui.tabWidget.addTab(self._ui.statBatch, 'Запуски')
 
         self._progressDelegate = ProgressBarDelegate()
@@ -49,13 +44,9 @@ class MainWindow(QMainWindow):
         self._ui.editSMTP.textChanged.connect(self._updateCreds)
         self._ui.editIMAP.textChanged.connect(self._updateCreds)
 
-        self._domainModel.workDirChanged.connect(self._ui.editDir.setText)
-        self._domainModel.workDirChanged.connect(self._batchTreeModel.rebuildBatchModel)
-
     def initUi(self):
         self.setupUiSignals()
 
-        self._ui.treeBatch.setModel(self._searchProxyModel)
         self._ui.listAddress.setModel(self._addressModel)
         self._ui.textTemplate.setPlainText(self._emailTemplate.template)
 
@@ -70,32 +61,22 @@ class MainWindow(QMainWindow):
         self._ui.editLogin.setText(settings['login'])
         self._ui.editPass.setText(settings['pass'])
 
-        self._ui.treeBatch: QTreeView
-
-        self._ui.treeBatch.setItemDelegateForColumn(3, self._progressDelegate)
-
     def initDialog(self):
         print('init dialog')
         self.initUi()
-        self._domainModel.initModel()
         self._updateCreds('')
 
         self.refreshView()
 
     # UI utility methods
     def refreshView(self):
-        # self.resizeTable()
-        # twidth = self._ui.treeBatch.frameGeometry().width() - 30
-        twidth = self.frameGeometry().width() - 40
-        self._ui.treeBatch.setColumnWidth(0, twidth * 0.10)
-        self._ui.treeBatch.setColumnWidth(1, twidth * 0.57)
-        self._ui.treeBatch.setColumnWidth(2, twidth * 0.11)
-        self._ui.treeBatch.setColumnWidth(3, twidth * 0.11)
-        self._ui.treeBatch.setColumnWidth(4, twidth * 0.11)
-
-    def resizeTable(self):
-        for i in range(self._ui.treeBatch.model().rowCount()):
-            self._ui.treeBatch.resizeColumnToContents(i)
+        pass
+        # twidth = self.frameGeometry().width() - 40
+        # self._ui.treeBatch.setColumnWidth(0, twidth * 0.10)
+        # self._ui.treeBatch.setColumnWidth(1, twidth * 0.57)
+        # self._ui.treeBatch.setColumnWidth(2, twidth * 0.11)
+        # self._ui.treeBatch.setColumnWidth(3, twidth * 0.11)
+        # self._ui.treeBatch.setColumnWidth(4, twidth * 0.11)
 
     # event handlers
     def resizeEvent(self, event):
@@ -113,15 +94,13 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def on_btnSendEmails_clicked(self):
         print('send emails')
-        if not self._ui.treeBatch.selectionModel().hasSelection():
+        if not self._ui.statBatch.hasSelection:
             QMessageBox.information(self.parent(), 'Внимание!', 'Выберите запуски для сосздания рассылки.')
             return
 
-        rows = sorted(map(lambda index: index.row(),  # extract row numbers
-                          filter(lambda index: index.data(BatchModel.RoleNodeId) == 1 and index.column() == 0,   # filter top level column 0 indexes
-                                 self._ui.treeBatch.selectionModel().selectedIndexes())))
+        rows = self._ui.statBatch.rows
 
-        if not self._emailManager.send(self._domainModel.getEmailData(rows), self._addressModel.getAddresses()):
+        if not self._emailManager.send(self._ui.statBatch.getEmailData(rows), self._addressModel.getAddresses()):
             QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
 
     @pyqtSlot()
