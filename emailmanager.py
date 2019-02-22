@@ -108,7 +108,7 @@ class EmailManager:
         for batch, devs in batches.items():
             for index, (dev, specs) in enumerate(devs.items()):
                 msg = EmailMessage()
-                h = Header(s=self._template.subject.replace('__LAUNCH__', batch), charset='utf-8')
+                h = Header(s=self._template.subject.replace('__LAUNCH__', batch[1]), charset='utf-8')
                 msg['From'] = from_addr
                 send_to = addrs.get(dev)
                 if not send_to:
@@ -117,7 +117,7 @@ class EmailManager:
                 fullname, msg['To'] = send_to
                 msg['Subject'] = h.encode(linesep='')
                 msg.set_content(self._template.message.replace('__NAME__', fullname).replace('__CHIP_LIST__', '\n'.join(
-                    [f'{index + 1}. {spec.name}' for index, spec in enumerate(specs)]
+                    [f'{index + 1}. {spec[1]}' for index, spec in enumerate(specs)]
                 )))
                 result.append(msg)
         return result
