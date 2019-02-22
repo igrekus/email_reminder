@@ -1,11 +1,9 @@
 # -*- coding: UTF-8 -*-
-from PyQt5.QtCore import Qt, QLine
-from PyQt5.QtGui import QBrush, QColor, qRgb
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QStyledItemDelegate, QStyle
 
-from batchmodel import BatchModel
-from domainmodel import DomainModel
-
+from statmodel import StatModel
 
 ProgressColor = (0xFF0000, 0xFC2700, 0xF75400, 0xF66B00, 0xEEC300,
                  0xE9FF00, 0xD2FF00, 0xBAFF00, 0x76FF00, 0x89FF00, 0x64FF00)
