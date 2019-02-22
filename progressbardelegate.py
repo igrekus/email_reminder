@@ -13,7 +13,7 @@ class ProgressBarDelegate(QStyledItemDelegate):
 
     def paint(self, painter, option, index):
 
-        if index.data(BatchModel.RoleTier) == 2:
+        if index.data(StatModel.RoleTier) == 2:
             super().paint(painter, option, index)
             return
 
@@ -35,7 +35,7 @@ class ProgressBarDelegate(QStyledItemDelegate):
         r.adjust(+1, +1, -3, -2)
         painter.drawRect(r)
 
-        value, total = index.data(BatchModel.RoleProgress)
+        value, total = index.data(StatModel.RoleProgress)
         progress = 0
         if total != 0:
             progress = value / total
