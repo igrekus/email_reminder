@@ -1,8 +1,15 @@
 class TreeNode(object):
+
     def __init__(self, data=None, parent=None):
         self._data = data
         self._parent_node = parent
         self._child_nodes = list()
+
+    def __str__(self):
+        return f'TreeNode(data:{self._data} parent:{self._parent_node} childs:{len(self._child_nodes)})'
+
+    def __getitem__(self, item):
+        return self._data[item]
 
     def append_child(self, item):
         self._child_nodes.append(item)
@@ -38,6 +45,3 @@ class TreeNode(object):
     @data.setter
     def data(self, data):
         self._data = data
-
-    def __str__(self):
-        return f'TreeNode(data:{self._data} parent:{self._parent_node} childs:{len(self._child_nodes)})'
