@@ -22,7 +22,7 @@ class BatchItem(object):
     _specs_total = attrib(default=0, type=int)
     _specs_needed = attrib(default=0, type=int)
     _specs_received = attrib(default=0, type=int)
-    _date = attrib(default=datetime.datetime.now().date(), type=datetime.date)
+    _date = attrib(default=datetime.datetime.now().date().isoformat()[:7], type=str)
     @property
     def tier(self):
         return self._tier
