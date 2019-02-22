@@ -94,16 +94,16 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def on_btnSendEmails_clicked(self):
         print('send emails')
-        if not self._ui.treeBatch.selectionModel().hasSelection():
+        if not self._ui.statBatch.hasSelection:
             QMessageBox.information(self.parent(), 'Внимание!', 'Выберите запуски для сосздания рассылки.')
             return
 
-        rows = sorted(map(lambda index: index.row(),  # extract row numbers
-                          filter(lambda index: index.data(BatchModel.RoleNodeId) == 1 and index.column() == 0,   # filter top level column 0 indexes
-                                 self._ui.treeBatch.selectionModel().selectedIndexes())))
+        rows = self._ui.statBatch.rows
 
-        if not self._emailManager.send(self._domainModel.getEmailData(rows), self._addressModel.getAddresses()):
-            QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
+        print(self._ui.statBatch.getEmailData(rows))
+        print(self._addressModel.getAddresses())
+        # if not self._emailManager.send(self._domainModel.getEmailData(rows), self._addressModel.getAddresses()):
+        #     QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
 
     @pyqtSlot()
     def on_btnAddAddress_clicked(self):

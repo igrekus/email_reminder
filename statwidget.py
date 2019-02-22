@@ -1,5 +1,6 @@
 import datetime
 import os
+from collections import defaultdict
 from pathlib import Path
 
 import openpyxl
@@ -184,6 +185,19 @@ class StatWidget(QWidget):
         if os.path.isdir(name):
             self._workDir = os.path.normpath(name)
             self._buildModel()
+
+    @property
+    def hasSelection(self):
+        return self._tree.selectionModel().hasSelection()
+
+    @property
+    def rows(self):
+        # print(list(filter(lambda index: index.data(StatTreeModel.RoleId) == 1 and index.column() == 0,   # filter top level column 0 indexes
+        #                          self._tree.selectionModel().selectedIndexes())))
+        # return [0]
+        return sorted(map(lambda index: index.row(),  # extract row numbers
+                          filter(lambda index: index.data(StatTreeModel.RoleId) == 1 and index.column() == 0,   # filter top level column 0 indexes
+                                 self._tree.selectionModel().selectedIndexes())))
 
     def _buildModel(self):
         batches, specs = self._processDir()
