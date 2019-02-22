@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineE
 
 from attr import attrs, attrib
 
-from statmodel import StatModel
+from stattreemodel import StatTreeModel
 from treenode import TreeNode
 from progressbardelegate import ProgressBarDelegate
 
@@ -16,7 +16,7 @@ from progressbardelegate import ProgressBarDelegate
 @attrs
 class BatchItem(object):
     _rowid = attrib(default=0, type=int)
-    _tier = attrib(default=StatModel.TIER_1)
+    _tier = attrib(default=StatTreeModel.TIER_1)
     _name = attrib(default='', type=str)
     _specs_total = attrib(default=0, type=int)
     _specs_needed = attrib(default=0, type=int)
@@ -72,7 +72,7 @@ class BatchItem(object):
 
 @attrs
 class SpecItem(object):
-    _tier = attrib(default=StatModel.TIER_2)
+    _tier = attrib(default=StatTreeModel.TIER_2)
     _name = attrib(default='', type=str)
     _is_received = attrib(default=False, type=bool)
     _rowid = attrib(default=0, type=int)
@@ -139,7 +139,7 @@ class StatWidget(QWidget):
         self._edit = QLineEdit()
         self._tree = QTreeView()
 
-        self._model = StatModel(parent=self, headers=headers)
+        self._model = StatTreeModel(parent=self, headers=headers)
 
         self._layoutControl = QHBoxLayout()
         self._layoutControl.addWidget(self._button)
@@ -220,7 +220,7 @@ class StatWidget(QWidget):
             total_specs, needed_specs, specs_list = self._parseExcelFile(file=file)
             specs_received = sum(map(lambda el: int(el.is_received), specs_list))
             specs_dict[batch] = specs_list
-            batches.append(BatchItem(rowid=index + 1, tier=StatModel.TIER_1, name=batch, specs_needed=needed_specs,
+            batches.append(BatchItem(rowid=index + 1, tier=StatTreeModel.TIER_1, name=batch, specs_needed=needed_specs,
                                      specs_total=total_specs, specs_received=specs_received,
                                      date=date_from_batch))
 

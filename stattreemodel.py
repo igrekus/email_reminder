@@ -5,7 +5,7 @@ from PyQt5.QtGui import QColor, QBrush
 from treenode import TreeNode
 
 
-class StatModel(QAbstractItemModel):
+class StatTreeModel(QAbstractItemModel):
 
     RoleId = Qt.UserRole + 1
     RoleTier = RoleId + 1
