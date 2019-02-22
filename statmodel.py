@@ -29,7 +29,7 @@ class StatModel(QAbstractItemModel):
         return parent_node.child_count()
 
     def columnCount(self, parent=QModelIndex(), *args, **kwargs):
-        return 5
+        return len(self._headers)
 
     def index(self, row, col, parent):
         if not self.hasIndex(row, col, parent):
