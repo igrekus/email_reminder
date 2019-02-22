@@ -100,10 +100,8 @@ class MainWindow(QMainWindow):
 
         rows = self._ui.statBatch.rows
 
-        print(self._ui.statBatch.getEmailData(rows))
-        print(self._addressModel.getAddresses())
-        # if not self._emailManager.send(self._domainModel.getEmailData(rows), self._addressModel.getAddresses()):
-        #     QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
+        if not self._emailManager.send(self._ui.statBatch.getEmailData(rows), self._addressModel.getAddresses()):
+            QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
 
     @pyqtSlot()
     def on_btnAddAddress_clicked(self):
