@@ -44,8 +44,6 @@ class StatWidget(QWidget):
         self._tree.setModel(self._model)
         self._tree.setItemDelegateForColumn(3, ProgressBarDelegate())
 
-        self.init()
-
     def init(self):
         self._domain.workDir = os.path.normpath(os.getcwd()) + '\\xlsx'
         self._edit.setText(self._domain.workDir)
