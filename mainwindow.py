@@ -61,10 +61,15 @@ class MainWindow(QMainWindow):
         self._ui.editLogin.setText(settings['login'])
         self._ui.editPass.setText(settings['pass'])
 
+    def initDomains(self):
+        self._ui.statBatch.init()
+
     def initDialog(self):
         print('init dialog')
         self.initUi()
         self._updateCreds('')
+
+        self.initDomains()
 
         self.refreshView()
 
