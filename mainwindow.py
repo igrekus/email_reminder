@@ -75,13 +75,7 @@ class MainWindow(QMainWindow):
 
     # UI utility methods
     def refreshView(self):
-        pass
-        # twidth = self.frameGeometry().width() - 40
-        # self._ui.treeBatch.setColumnWidth(0, twidth * 0.10)
-        # self._ui.treeBatch.setColumnWidth(1, twidth * 0.57)
-        # self._ui.treeBatch.setColumnWidth(2, twidth * 0.11)
-        # self._ui.treeBatch.setColumnWidth(3, twidth * 0.11)
-        # self._ui.treeBatch.setColumnWidth(4, twidth * 0.11)
+        self._ui.statBatch.resizeTable(self.frameGeometry().width() - 30, [0.08, 0.60, 0.12, 0.12, 0.08])
 
     # event handlers
     def resizeEvent(self, event):

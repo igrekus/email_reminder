@@ -80,4 +80,6 @@ class StatWidget(QWidget):
 
         return email_data
 
-
+    def resizeTable(self, width, columns):
+        for index, column in enumerate(columns):
+            self._tree.setColumnWidth(index, width * column)
