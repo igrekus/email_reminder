@@ -143,9 +143,9 @@ class BatchDomain:
 
         self._root = TreeNode(None, None)
 
-        for file in batches:
-            newNode = TreeNode(file, self._root)
-            spec = specs.get(file.name)
+        for batch in batches:
+            newNode = TreeNode(batch, self._root)
+            spec = specs.get(batch.name)
             if spec:
                 for s in spec:
                     newNode.append_child(TreeNode(s, newNode))
