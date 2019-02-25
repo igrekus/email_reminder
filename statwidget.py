@@ -14,11 +14,11 @@ from progressbardelegate import ProgressBarDelegate
 
 class StatWidget(QWidget):
 
-    def __init__(self, parent=None, headers=None):
+    def __init__(self, parent=None, domain=None, headers=None):
         super().__init__(parent=parent)
 
         self._root = None
-        self._domain = BatchDomain()
+        self._domain = domain
 
         self._button = QPushButton('Открыть...')
         self._edit = QLineEdit()
