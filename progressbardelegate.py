@@ -13,7 +13,7 @@ class ProgressBarDelegate(QStyledItemDelegate):
 
     def paint(self, painter, option, index):
 
-        if index.data(StatTreeModel.RoleTier) == 2:
+        if index.data(StatTreeModel.RoleTier) != 1 or index.column() != 3:
             super().paint(painter, option, index)
             return
 
