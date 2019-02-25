@@ -135,7 +135,7 @@ class BatchDomain:
         self._root = TreeNode(None, None)
 
     def init(self):
-        print('init domain for dir', self._workDir)
+        print(f'init batch domain for dir {self._workDir}')
         self._buildModel()
 
     def _buildModel(self):
