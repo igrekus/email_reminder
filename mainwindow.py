@@ -6,7 +6,9 @@ from PyQt5.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QTreeView
 from PyQt5.QtCore import Qt, QSortFilterProxyModel, pyqtSlot
 
 from addressmodel import AddressModel
+from batchdomain import BatchDomain
 from batchmodel import BatchModel
+from devicedomain import DeviceDomain
 from domainmodel import DomainModel
 from emailmanager import EmailManager
 from emailtemplate import EmailTemplate
@@ -33,6 +35,9 @@ class MainWindow(QMainWindow):
 
         self._ui.statBatch = StatWidget(parent=self, domain=BatchDomain(), headers=['№', 'Запуск', 'Кристаллов всего', 'Прогресс', 'Дата запуска'])
         self._ui.tabWidget.addTab(self._ui.statBatch, 'Запуски')
+
+        self._ui.statDevice = StatWidget(parent=self, domain=DeviceDomain(), headers=['№', 'Изделие', 'Оснастка', 'Прогресс'])
+        self._ui.tabWidget.addTab(self._ui.statDevice, 'Выпускаемые изделия')
 
         self._progressDelegate = ProgressBarDelegate()
 
@@ -75,7 +80,10 @@ class MainWindow(QMainWindow):
 
     # UI utility methods
     def refreshView(self):
-        self._ui.statBatch.resizeTable(self.frameGeometry().width() - 30, [0.08, 0.60, 0.12, 0.12, 0.08])
+        twidth = self.frameGeometry().width() - 30
+        self._ui.statBatch.resizeTable(twidth, [0.08, 0.60, 0.12, 0.12, 0.08])
+        self._ui.statDevice.resizeTable(twidth, [0.08, 0.30, 0.31, 0.31])
+        # self._ui.statBatch.resizeTable(twidth, [0.08, 0.60, 0.12, 0.12, 0.08])
 
     # event handlers
     def resizeEvent(self, event):
