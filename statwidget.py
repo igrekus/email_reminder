@@ -4,7 +4,8 @@ from pathlib import Path
 
 import openpyxl
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog, \
+    QAbstractItemView
 
 from batchdomain import BatchItem, SpecItem, BatchDomain
 from stattreemodel import StatTreeModel
@@ -14,11 +15,11 @@ from progressbardelegate import ProgressBarDelegate
 
 class StatWidget(QWidget):
 
-    def __init__(self, parent=None, headers=None):
+    def __init__(self, parent=None, domain=None, headers=None):
         super().__init__(parent=parent)
 
         self._root = None
-        self._domain = BatchDomain()
+        self._domain = domain
 
         self._button = QPushButton('Открыть...')
         self._edit = QLineEdit()
@@ -43,6 +44,8 @@ class StatWidget(QWidget):
 
         self._tree.setModel(self._model)
         self._tree.setItemDelegateForColumn(3, ProgressBarDelegate())
+        self._tree.setSelectionMode(QAbstractItemView.MultiSelection)
+        self._tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
     def init(self):
         self._domain.workDir = os.path.normpath(os.getcwd()) + '\\xlsx'
@@ -80,4 +83,6 @@ class StatWidget(QWidget):
 
         return email_data
 
-
+    def resizeTable(self, width, columns):
+        for index, column in enumerate(columns):
+            self._tree.setColumnWidth(index, width * column)
