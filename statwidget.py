@@ -4,7 +4,8 @@ from pathlib import Path
 
 import openpyxl
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog
+from PyQt5.QtWidgets import QWidget, QPushButton, QTreeView, QHBoxLayout, QLineEdit, QVBoxLayout, QFileDialog, \
+    QAbstractItemView
 
 from batchdomain import BatchItem, SpecItem, BatchDomain
 from stattreemodel import StatTreeModel
@@ -43,6 +44,8 @@ class StatWidget(QWidget):
 
         self._tree.setModel(self._model)
         self._tree.setItemDelegateForColumn(3, ProgressBarDelegate())
+        self._tree.setSelectionMode(QAbstractItemView.MultiSelection)
+        self._tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
     def init(self):
         self._domain.workDir = os.path.normpath(os.getcwd()) + '\\xlsx'
