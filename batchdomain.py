@@ -1,8 +1,8 @@
 import datetime
 import os
-from pathlib import Path
-
 import openpyxl
+
+from pathlib import Path
 from attr import attrs, attrib
 
 from stattreemodel import StatTreeModel
