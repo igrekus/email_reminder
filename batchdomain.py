@@ -157,7 +157,7 @@ class BatchDomain:
         specs_dict = dict()
 
         def checkFileEntry(entry):
-            return entry.is_file() and entry.path.endswith('.xlsx')
+            return entry.is_file() and entry.path.endswith('.xlsx') and 'ЗАПУСК' in entry.path
 
         def excelFiles():
             with os.scandir(self._workDir) as entries:
