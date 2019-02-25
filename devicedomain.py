@@ -115,20 +115,12 @@ class DeviceDomain:
         for dev in devices:
             newNode = TreeNode(dev, self._root)
             newNode.append_child(TreeNode(RigTypeItem(0, 2, 'Статика', 'ПП 23.10.1123', 'БКВП 111111.239841'), newNode))
+            newNode.append_child(TreeNode(RigTypeItem(0, 2, 'Динамика', 'ПП 23.10.1123', 'БКВП 111111.239841'), newNode))
+            newNode.append_child(TreeNode(RigTypeItem(0, 2, 'Надежность', 'ПП 23.10.1123', 'БКВП 111111.239841'), newNode))
+            newNode.append_child(TreeNode(RigTypeItem(0, 2, 'Тепло/холод', 'ПП 23.10.1123', ''), newNode))
             self._root.append_child(newNode)
 
         return
-        # batches, specs = self._processDir()
-        #
-        # self._root = TreeNode(None, None)
-        #
-        # for file in batches:
-        #     newNode = TreeNode(file, self._root)
-        #     spec = specs.get(file.name)
-        #     if spec:
-        #         for s in spec:
-        #             newNode.append_child(TreeNode(s, newNode))
-        #     self._root.append_child(newNode)
 
     def _processDir(self):
 
@@ -146,13 +138,9 @@ class DeviceDomain:
 
         for index, file in enumerate(excelFiles()):
             batch = Path(file).resolve().stem
-            date_from_batch = batch[-7:].replace('_', '-')
             total_specs, needed_specs, specs_list = self._parseExcelFile(file=file)
-            specs_received = sum(map(lambda el: int(el.is_received), specs_list))
             specs_dict[batch] = specs_list
-            batches.append(DeviceItem(rowid=index + 1, tier=StatTreeModel.TIER_1, name=batch, specs_needed=needed_specs,
-                                      specs_total=total_specs, specs_received=specs_received,
-                                      date=date_from_batch))
+            batches.append(DeviceItem(rowid=index + 1, tier=StatTreeModel.TIER_1, name=batch))
 
         return batches, specs_dict
 
@@ -167,8 +155,7 @@ class DeviceDomain:
                 rowid, desc, chip, fio, is_needed, board_date, is_received = [el.value for el in row]
                 total_specs += 1
                 if is_needed and is_needed == '+':
-                    specs.append(RigTypeItem(rowid=rowid, name=f'{chip} - {desc}', developer=fio,
-                                             is_received=False if is_received == '-' else True))
+                    specs.append(RigTypeItem(rowid=rowid, name=f'{chip} - {desc}'))
                     needed_specs += 1
         wb.close()
         return total_specs, needed_specs, specs
