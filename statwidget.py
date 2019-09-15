@@ -44,7 +44,7 @@ class StatWidget(QWidget):
 
         self._tree.setModel(self._model)
         self._tree.setItemDelegateForColumn(3, ProgressBarDelegate())
-        self._tree.setSelectionMode(QAbstractItemView.MultiSelection)
+        self._tree.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self._tree.setSelectionBehavior(QAbstractItemView.SelectRows)
 
     def init(self):
