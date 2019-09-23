@@ -184,7 +184,7 @@ class BatchModel(QAbstractItemModel):
 
     def flags(self, index: QModelIndex):
         f = super().flags(index)
-        return f
+        return f | Qt.ItemIsSelectable | Qt.ItemIsEnabled
 
     @pyqtSlot(str, name='onDeviceAdded')
     def rebuildBatchModel(self, _: str):
