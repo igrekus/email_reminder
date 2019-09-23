@@ -104,14 +104,27 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def on_btnSendEmails_clicked(self):
-        print('send emails')
-        if not self._ui.statBatch.hasSelection:
-            QMessageBox.information(self.parent(), 'Внимание!', 'Выберите запуски для сосздания рассылки.')
+        tab = self._ui.tabWidget.currentIndex()
+        print(f'send emails for {tab}')
+        widget = None
+        if tab == 0:
+            widget = self._ui.statBatch
+        if tab == 1:
+            widget = self._ui.statDevice
+        if tab == 2:
+            widget = self._ui.statProject
+
+        if widget is None:
             return
 
-        rows = self._ui.statBatch.rows
+        if not widget.hasSelection:
+            QMessageBox.information(self.parent(), 'Внимание!', 'Выберите записи для создания рассылки.')
+            return
 
-        if not self._emailManager.send(self._ui.statBatch.getEmailData(rows), self._addressModel.getAddresses()):
+        rows = widget.rows
+        if tab != 0:
+            return
+        if not self._emailManager.send(widget.getEmailData(rows), self._addressModel.getAddresses()):
             QMessageBox.warning(self.parent(), 'Внимание!', 'Произошла ошибка при отправке писем, подробности в логах.')
 
     @pyqtSlot()
