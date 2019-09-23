@@ -14,6 +14,7 @@ from emailmanager import EmailManager
 from emailtemplate import EmailTemplate
 from formlayout.formlayout import fedit
 from progressbardelegate import ProgressBarDelegate
+from projectdomain import ProjectDomain
 from statwidget import StatWidget
 
 
@@ -38,6 +39,9 @@ class MainWindow(QMainWindow):
 
         self._ui.statDevice = StatWidget(parent=self, domain=DeviceDomain(), headers=['№', 'Изделие', 'Оснастка', 'Прогресс'])
         self._ui.tabWidget.addTab(self._ui.statDevice, 'Выпускаемые изделия')
+
+        self._ui.statProject = StatWidget(parent=self, domain=ProjectDomain(), headers=['№', 'ОКР', 'Количество ТЗ', 'Прогресс', 'Дата завершения'])
+        self._ui.tabWidget.addTab(self._ui.statProject, 'Текущие ОКР')
 
         self._progressDelegate = ProgressBarDelegate()
 
@@ -83,7 +87,7 @@ class MainWindow(QMainWindow):
         twidth = self.frameGeometry().width() - 30
         self._ui.statBatch.resizeTable(twidth, [0.08, 0.60, 0.12, 0.12, 0.08])
         self._ui.statDevice.resizeTable(twidth, [0.08, 0.30, 0.31, 0.31])
-        # self._ui.statBatch.resizeTable(twidth, [0.08, 0.60, 0.12, 0.12, 0.08])
+        self._ui.statProject.resizeTable(twidth, [0.08, 0.60, 0.12, 0.12, 0.08])
 
     # event handlers
     def resizeEvent(self, event):

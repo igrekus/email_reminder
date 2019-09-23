@@ -12,7 +12,8 @@ class StatTreeModel(QAbstractItemModel):
     RoleProgress = RoleTier + 1
 
     TIER_1, \
-    TIER_2 = range(1, 3)
+        TIER_2, \
+        TIER_3 = range(1, 4)
 
     ColumnProgress = 3
 
