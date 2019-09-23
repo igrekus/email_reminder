@@ -68,9 +68,14 @@ class StatWidget(QWidget):
 
     @property
     def rows(self):
-        return sorted(map(lambda index: index.row(),  # extract row numbers
-                          filter(lambda index: index.data(StatTreeModel.RoleId) == 1 and index.column() == 0,   # filter top level column 0 indexes
-                                 self._tree.selectionModel().selectedIndexes())))
+        top_level_rows = [
+            index
+            for index
+            in self._tree.selectionModel().selectedIndexes()
+            if index.data(StatTreeModel.RoleTier) == StatTreeModel.TIER_1 and index.column() == 0
+        ]
+        sorted_row_numbers = list(sorted([index.row() for index in top_level_rows]))
+        return sorted_row_numbers
 
     def getEmailData(self, rows):
         # TODO handle selected rows
