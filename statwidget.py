@@ -73,8 +73,10 @@ class StatWidget(QWidget):
                                  self._tree.selectionModel().selectedIndexes())))
 
     def getEmailData(self, rows):
+        # TODO handle selected rows
+        # TODO handle different domains for email generation, works only for batch stats now
         email_data = dict()
-        for batch in self._root.child_nodes:
+        for batch in self._model._rootNode.child_nodes:
             specs_for_dev = defaultdict(list)
             for spec in batch.child_nodes:
                 if not spec['received']:
